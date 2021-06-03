@@ -3,7 +3,7 @@ on: pull_request
 jobs:
   test-ray-client:
     runs-on: ubuntu-latest
-    continue-on-error: True
+    continue-on-error: true
     defaults:
       run:
         shell: bash -l {0}
