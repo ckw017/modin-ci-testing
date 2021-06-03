@@ -32,26 +32,18 @@ jobs:
         run: |
           conda info
           conda list
-      - name: Install HDF5
-        run: sudo apt update && sudo apt install -y libhdf5-dev
       - run: pip install ray==1.3
       - run: pip show ray
-      - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py || echo flaked
-      - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value' || echo flaked
-      # - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'math_functions_fill_value' || echo Broken # Cannot send request due to data channel shutting down.
-      # - run: pytest modin/pandas/test/dataframe/test_default.py || echo flaked
-      # - run: pytest modin/pandas/test/dataframe/test_indexing.py || echo Broken
-      - run: pytest modin/pandas/test/dataframe/test_iter.py || echo flaked
-      # - run: pytest modin/pandas/test/dataframe/test_join_sort.py || echo flaked # Fine, just takes a while
-      # - run: pytest modin/pandas/test/dataframe/test_map_metadata.py || echo flaked
-      # - run: pytest modin/pandas/test/dataframe/test_reduction.py || echo Broken # deadlock detected by _ModuleLock('pandas.core.frame')
-      - run: pytest modin/pandas/test/dataframe/test_udf.py || echo flaked
-      - run: pytest modin/pandas/test/dataframe/test_window.py || echo flaked
-      - run: pytest modin/pandas/test/dataframe/test_pickle.py || echo flaked
-      # - run: pytest modin/pandas/test/test_series.py || echo Broken # Failed to unpickle the remote function 'modin.engines.ray.pandas_on_ray.frame.axis_partition.deploy_ray_func'
-      - run: pytest modin/pandas/test/test_rolling.py || echo flaked
-      - run: pytest modin/pandas/test/test_concat.py || echo flaked
-      # - run: pytest modin/pandas/test/test_groupby.py || echo Broken # Failed to unpickle the remote function 'modin.engines.ray.pandas_on_ray.frame.axis_partition.deploy_ray_func'
-      - run: pytest modin/pandas/test/test_reshape.py || echo flaked
-      - run: pytest modin/pandas/test/test_general.py || echo flaked
-      - run: pytest modin/pandas/test/test_io.py || echo flaked
+      - name: Install HDF5
+        run: sudo apt update && sudo apt install -y libhdf5-dev
+      - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py
+      - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value'
+      - run: pytest modin/pandas/test/dataframe/test_iter.py
+      - run: pytest modin/pandas/test/dataframe/test_udf.py
+      - run: pytest modin/pandas/test/dataframe/test_window.py
+      - run: pytest modin/pandas/test/dataframe/test_pickle.py
+      - run: pytest modin/pandas/test/test_rolling.py
+      - run: pytest modin/pandas/test/test_concat.py
+      - run: pytest modin/pandas/test/test_reshape.py
+      - run: pytest modin/pandas/test/test_general.py
+      - run: pytest modin/pandas/test/test_io.py
