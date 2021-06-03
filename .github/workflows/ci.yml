@@ -1,8 +1,8 @@
 name: ci
 on: pull_request
 jobs:
-  continue-on-error: true
   test-ray-client:
+    continue-on-error: true
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -16,6 +16,7 @@ jobs:
       TEST_RAY_CLIENT: True
     name: test-ubuntu (engine ray-client), python ${{matrix.python-version}})
     steps:
+      continue-on-error: true
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
