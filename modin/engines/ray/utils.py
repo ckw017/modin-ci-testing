@@ -21,6 +21,7 @@ import ray
 from modin.config import (
     Backend,
     IsRayCluster,
+    TestRayClient,
     RayRedisAddress,
     CpuCount,
     GpuCount,
@@ -139,14 +140,16 @@ def initialize_ray(
     """
     import ray
 
-    if not ray.is_initialized() or override_is_cluster:
+    if not ray.is_initialized() or override_is_cluster or TestRayClient.get():
         import secrets
 
         cluster = override_is_cluster or IsRayCluster.get()
         redis_address = override_redis_address or RayRedisAddress.get()
         redis_password = override_redis_password or secrets.token_hex(32)
 
-        if cluster:
+        if TestRayClient.get():
+            ray.util.connect(f"0.0.0.0:{50051}")
+        elif cluster:
             # We only start ray in a cluster setting for the head node.
             ray.init(
                 address=redis_address or "auto",

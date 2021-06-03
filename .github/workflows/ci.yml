@@ -3,7 +3,6 @@ on: pull_request
 jobs:
   test-ray-client:
     runs-on: ubuntu-latest
-    continue-on-error: true
     defaults:
       run:
         shell: bash -l {0}
@@ -34,22 +33,22 @@ jobs:
       - name: Install HDF5
         run: sudo apt update && sudo apt install -y libhdf5-dev
       - run: pip install ray==1.3
-      - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py
-      - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value'
+      - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value' || echo Flaked
       - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'math_functions_fill_value' || echo Broken
-      - run: pytest modin/pandas/test/dataframe/test_default.py
+      - run: pytest modin/pandas/test/dataframe/test_default.py || echo Flaked
       # - run: pytest modin/pandas/test/dataframe/test_indexing.py || echo Flaky
-      - run: pytest modin/pandas/test/dataframe/test_iter.py
-      - run: pytest modin/pandas/test/dataframe/test_join_sort.py
-      - run: pytest modin/pandas/test/dataframe/test_map_metadata.py
-      - run: pytest modin/pandas/test/dataframe/test_reduction.py
-      - run: pytest modin/pandas/test/dataframe/test_udf.py
-      - run: pytest modin/pandas/test/dataframe/test_window.py
-      - run: pytest modin/pandas/test/dataframe/test_pickle.py
-      - run: pytest modin/pandas/test/test_series.py
-      - run: pytest modin/pandas/test/test_rolling.py
-      - run: pytest modin/pandas/test/test_concat.py
-      - run: pytest modin/pandas/test/test_groupby.py
-      - run: pytest modin/pandas/test/test_reshape.py
-      - run: pytest modin/pandas/test/test_general.py
-      - run: pytest modin/pandas/test/test_io.py
+      - run: pytest modin/pandas/test/dataframe/test_iter.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_join_sort.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_map_metadata.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_reduction.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_udf.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_window.py || echo Flaked
+      - run: pytest modin/pandas/test/dataframe/test_pickle.py || echo Flaked
+      - run: pytest modin/pandas/test/test_series.py || echo Flaked
+      - run: pytest modin/pandas/test/test_rolling.py || echo Flaked
+      - run: pytest modin/pandas/test/test_concat.py || echo Flaked
+      - run: pytest modin/pandas/test/test_groupby.py || echo Flaked
+      - run: pytest modin/pandas/test/test_reshape.py || echo Flaked
+      - run: pytest modin/pandas/test/test_general.py || echo Flaked
+      - run: pytest modin/pandas/test/test_io.py || echo Flaked
