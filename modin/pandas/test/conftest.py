@@ -25,5 +25,10 @@ def pytest_sessionstart(session):
 
 def pytest_sessionfinish(session):
     if server_proc and TestRayClient.get():
-        ray.util.disconnect()
-        server_proc.kill()
+        try:
+            ray.util.disconnect()
+        except RuntimeError as e:
+            # Mimic behavior of 1.4+ where disconnect is idempotent
+            pass
+        if server_proc.poll() is None:
+            server_proc.kill()
