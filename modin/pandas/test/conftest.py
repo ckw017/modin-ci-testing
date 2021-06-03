@@ -20,7 +20,7 @@ def pytest_sessionstart(session):
         port = '50051'
         global server_proc
         server_proc = subprocess.Popen([
-            'python', '-m', 'ray.util.client.server', '--port', port, '--redis-address', '0.0.0.0:12345'])
+            'python', '-m', 'ray.util.client.server', '--port', port])
         # ray.util.connect(f"0.0.0.0:{port}")
 
 def pytest_sessionfinish(session):
