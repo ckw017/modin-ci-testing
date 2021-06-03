@@ -5,9 +5,8 @@ from modin.config import TestRayClient
 
 server_proc = None
 
-def _import_pandas():
+def _import_pandas(*args):
     import pandas
-    import modin.pandas
 
 def pytest_sessionstart(session):
     if TestRayClient.get():
@@ -26,8 +25,8 @@ def pytest_sessionstart(session):
         global server_proc
         server_proc = subprocess.Popen([
             'python', '-m', 'ray.util.client.server', '--port', port])
-        ray.util.connect(f"0.0.0.0:{port}")
         ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
+        ray.util.connect(f"0.0.0.0:{port}")
 
 def pytest_sessionfinish(session):
     if server_proc and TestRayClient.get():
