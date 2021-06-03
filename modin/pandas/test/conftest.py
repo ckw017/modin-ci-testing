@@ -11,8 +11,8 @@ def _import_pandas():
 
 def pytest_sessionstart(session):
     if TestRayClient.get():
-        import modin.pandas
-        import ray
+        # import modin.pandas
+        # import ray
         from ray.util.client.common import ClientBaseRef, ClientObjectRef
         # This part fixes an issue in ray 1.3 that will be resolved in the 1.4
         # release (https://github.com/ray-project/ray/pull/15320)
@@ -22,12 +22,12 @@ def pytest_sessionstart(session):
             return isinstance(other, ClientBaseRef) and self.id == other.id
         ClientObjectRef.__eq__ = patched_eq
 
-        port = '50051'
-        global server_proc
-        server_proc = subprocess.Popen([
-            'python', '-m', 'ray.util.client.server', '--port', port])
-        ray.util.connect(f"0.0.0.0:{port}")
-        ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
+        # port = '50051'
+        # global server_proc
+        # server_proc = subprocess.Popen([
+        #     'python', '-m', 'ray.util.client.server', '--port', port])
+        # ray.util.connect(f"0.0.0.0:{port}")
+        # ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
 
 def pytest_sessionfinish(session):
     if server_proc and TestRayClient.get():
