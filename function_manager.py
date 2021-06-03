@@ -12,6 +12,7 @@ from collections import (
     namedtuple,
     defaultdict,
 )
+from importlib._bootstrap import _DeadlockError
 
 import ray
 from ray import profiling
@@ -181,7 +182,8 @@ class FunctionActorManager:
                 while True:
                     try:
                         function = pickle.loads(serialized_function)
-                    except RuntimeError:
+                        break
+                    except _DeadlockError:
                         if sleep_time > 3:
                             raise
                         time.sleep(sleep_time)
