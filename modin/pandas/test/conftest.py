@@ -7,10 +7,12 @@ server_proc = None
 
 def _import_pandas():
     import pandas
+    import modin.pandas
 
 def pytest_sessionstart(session):
     if TestRayClient.get():
         import ray
+        import modin.pandas
         from ray.util.client.common import ClientBaseRef, ClientObjectRef
         # This part fixes an issue in ray 1.3 that will be resolved in the 1.4
         # release (https://github.com/ray-project/ray/pull/15320)
