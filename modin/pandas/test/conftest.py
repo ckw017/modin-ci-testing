@@ -1,5 +1,6 @@
 import subprocess
 import pytest
+import time
 from unittest.mock import patch
 from modin.config import TestRayClient
 
@@ -25,8 +26,11 @@ def pytest_sessionstart(session):
         global server_proc
         server_proc = subprocess.Popen([
             'python', '-m', 'ray.util.client.server', '--port', port])
+        time.sleep(5) # Give some leeway?
         ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
         ray.util.connect(f"0.0.0.0:{port}")
+        ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
+        time.sleep(5)
 
 def pytest_sessionfinish(session):
     if server_proc and TestRayClient.get():

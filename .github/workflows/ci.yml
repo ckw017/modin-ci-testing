@@ -13,6 +13,7 @@ jobs:
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
+      MODIN_RAY_CLUSTER: True
       TEST_RAY_CLIENT: True
     name: test-ubuntu (engine ray-client), python ${{matrix.python-version}})
     steps:
