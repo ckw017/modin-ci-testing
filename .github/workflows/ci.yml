@@ -127,7 +127,7 @@ jobs:
           MODIN_ENGINE=dask python -c "import modin.pandas as pd; print(pd.DataFrame([1,2,3]))"
           MODIN_ENGINE=ray python -c "import modin.pandas as pd; print(pd.DataFrame([1,2,3]))"
 
-test-ray-client:
+  test-ray-client:
     runs-on: ubuntu-latest
     defaults:
       run:
