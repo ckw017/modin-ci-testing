@@ -1,113 +1,5 @@
 name: ci
 on: pull_request
-jobs:
-  lint-commit:
-    name: lint (commit)
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v1
-        with:
-          node-version: "12.x"
-      - run: npm install --save-dev @commitlint/{config-conventional,cli} commitlint-plugin-jira-rules commitlint-config-jira
-      - name: Add dependencies for commitlint action
-        run: echo "NODE_PATH=$GITHUB_WORKSPACE/node_modules" >> $GITHUB_ENV
-      - run: git remote add upstream https://github.com/modin-project/modin.git
-      - run: git fetch upstream
-      - run: npx commitlint --from upstream/master --to HEAD --verbose
-
-  lint-black:
-    name: lint (black)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.7.x"
-          architecture: "x64"
-      - run: pip install black
-      - run: black --check --diff modin/ asv_bench/benchmarks scripts/doc_checker.py
-
-  lint-pydocstyle:
-    name: lint (pydocstyle)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.7.x"
-          architecture: "x64"
-      - run: pip install pytest pytest-cov pydocstyle numpydoc==1.1.0 xgboost
-      - run: pytest scripts/test
-      - run: pip install -e .[all]
-      - run: |
-          python scripts/doc_checker.py --add-ignore=D101,D102,D103,D105 --disable-numpydoc \
-            modin/pandas/dataframe.py modin/pandas/series.py \
-            modin/pandas/groupby.py \
-            modin/pandas/series_utils.py modin/pandas/general.py \
-            modin/pandas/plotting.py modin/pandas/utils.py \
-            modin/pandas/iterator.py modin/pandas/indexing.py \
-      - run: python scripts/doc_checker.py modin/engines/base/frame
-      - run: python scripts/doc_checker.py modin/engines/dask
-      - run: |
-          python scripts/doc_checker.py \
-            modin/pandas/accessor.py modin/pandas/general.py \
-            modin/pandas/groupby.py modin/pandas/indexing.py \
-            modin/pandas/iterator.py modin/pandas/plotting.py \
-            modin/pandas/series_utils.py modin/pandas/utils.py \
-            modin/pandas/base.py \
-            modin/pandas/io.py modin/engines/base/io/io.py \
-            modin/engines/base/frame asv_bench/benchmarks/utils.py \
-            asv_bench/benchmarks/__init__.py asv_bench/benchmarks/io/__init__.py \
-            asv_bench/benchmarks/scalability/__init__.py \
-            modin/engines/base/io/column_stores \
-            modin/engines/base/io/sql \
-            modin/engines/base/io/text \
-            modin/engines/base/io/__init__.py \
-            modin/engines/base/io/file_dispatcher.py \
-            modin/experimental/engines/pandas_on_ray \
-            modin/experimental/engines/pyarrow_on_ray
-      - run: python scripts/doc_checker.py modin/distributed
-      - run: python scripts/doc_checker.py modin/utils.py
-      - run: python scripts/doc_checker.py modin/experimental/sklearn
-      - run: |
-          python scripts/doc_checker.py modin/experimental/xgboost/__init__.py \
-            modin/experimental/xgboost/utils.py modin/experimental/xgboost/xgboost.py \
-            modin/experimental/xgboost/xgboost_ray.py
-      - run: python scripts/doc_checker.py modin/engines/ray
-      - run: |
-          python scripts/doc_checker.py modin/data_management/functions \
-            modin/data_management/factories/factories.py                \
-            modin/data_management/factories/dispatcher.py               \
-            modin/data_management/utils.py
-      - run: python scripts/doc_checker.py scripts/doc_checker.py
-      - run: |
-          python scripts/doc_checker.py modin/experimental/pandas/io_exp.py \
-            modin/experimental/pandas/numpy_wrap.py modin/experimental/pandas/__init__.py
-      - run: python scripts/doc_checker.py modin/backends/pandas
-
-  lint-flake8:
-    name: lint (flake8)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.7.x"
-          architecture: "x64"
-      - run: pip install flake8 flake8-print
-      - run: flake8 --enable=T modin/ asv_bench/benchmarks scripts/doc_checker.py
-
   test-api:
     runs-on: ubuntu-latest
     name: test api
@@ -160,7 +52,6 @@ jobs:
         run: python -m pytest modin/test/test_headers.py
 
   test-clean-install-ubuntu:
-    needs: [lint-commit, lint-flake8, lint-black, test-api, test-headers]
     runs-on: ubuntu-latest
     name: test-clean-install-ubuntu
     steps:
@@ -179,7 +70,6 @@ jobs:
           MODIN_ENGINE=ray python -c "import modin.pandas as pd; print(pd.DataFrame([1,2,3]))"
 
   test-clean-install-windows:
-    needs: [ lint-commit, lint-flake8, lint-black, test-api, test-headers ]
     runs-on: windows-latest
     name: test-clean-install-windows
     steps:
@@ -198,7 +88,6 @@ jobs:
           MODIN_ENGINE=ray python -c "import modin.pandas as pd; print(pd.DataFrame([1,2,3]))"
 
   test-ray-client:
-    needs: [lint-commit, lint-flake8, lint-black, test-api, test-headers]
     runs-on: ubuntu-latest
     defaults:
       run:
