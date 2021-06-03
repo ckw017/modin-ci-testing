@@ -39,7 +39,7 @@ jobs:
       - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value' || echo flaked
       - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'math_functions_fill_value' || echo Broken # Cannot send request due to data channel shutting down.
       - run: pytest modin/pandas/test/dataframe/test_default.py || echo flaked
-      - run: pytest modin/pandas/test/dataframe/test_indexing.py || echo Broken
+      # - run: pytest modin/pandas/test/dataframe/test_indexing.py || echo Broken
       - run: pytest modin/pandas/test/dataframe/test_iter.py || echo flaked
       - run: pytest modin/pandas/test/dataframe/test_join_sort.py || echo flaked
       - run: pytest modin/pandas/test/dataframe/test_map_metadata.py || echo flaked
