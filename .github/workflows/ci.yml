@@ -16,7 +16,6 @@ jobs:
       TEST_RAY_CLIENT: True
     name: test-ubuntu (engine ray-client), python ${{matrix.python-version}})
     steps:
-      continue-on-error: true
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
