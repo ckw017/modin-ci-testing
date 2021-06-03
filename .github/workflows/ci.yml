@@ -30,9 +30,9 @@ jobs:
         run: |
           conda info
           conda list
-      - run: pip install ray==1.3
       - name: Install HDF5
         run: sudo apt update && sudo apt install -y libhdf5-dev
+      - run: pip install ray==1.3
       - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py
       - run: pytest modin/pandas/test/dataframe/test_binary.py -k 'not math_functions_fill_value' || echo Flaky
       - run: pytest modin/pandas/test/dataframe/test_default.py || echo Flaky
