@@ -31,11 +31,5 @@ def pytest_sessionstart(session):
 
 def pytest_sessionfinish(session):
     if server_proc and TestRayClient.get():
-        try:
-            import ray
-            ray.util.disconnect()
-        except RuntimeError as e:
-            # Mimic behavior of 1.4+ where disconnect is idempotent
-            pass
-        if server_proc.poll() is None:
-            server_proc.kill()
+        stop_proc = subprocess.Popen(["ray", "stop", "--force"])
+        stop_proc.wait()
