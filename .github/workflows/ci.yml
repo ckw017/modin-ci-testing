@@ -10,12 +10,13 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.7", "3.8"]
+        retries: [1,2,3]
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
       MODIN_RAY_CLUSTER: "True"
       TEST_RAY_CLIENT: "True"
-    name: test-ubuntu (engine ray-client), python ${{matrix.python-version}})
+    name: test-ray-client (python ${{matrix.python-version}})
     steps:
       - uses: actions/checkout@v2
         with:
