@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.7", "3.8"]
-        retries: [1,2,3]
+        retries: [1,2,3,4,5]
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
