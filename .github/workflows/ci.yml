@@ -16,7 +16,7 @@ jobs:
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
-      MODIN_RAY_CLUSTER: "True"
+      # MODIN_RAY_CLUSTER: "True"
       # TEST_RAY_CLIENT: "True"
     name: "test-ray-client (python ${{matrix.python-version}}, ray ${{matrix.ray-version}}, run #${{matrix.retries}})"
     steps:
