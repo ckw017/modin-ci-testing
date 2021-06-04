@@ -24,7 +24,8 @@ def pytest_sessionstart(session):
         port = '50051'
         global server_proc
         server_proc = subprocess.Popen([
-            'python', '-m', 'ray.util.client.server', '--port', port])
+            "ray", "start", "--head", "--num-cpus", "2",
+        "--ray-client-server-port", port])
         ray.util.connect(f"0.0.0.0:{port}")
         ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
 
