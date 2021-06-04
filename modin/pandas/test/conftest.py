@@ -3,7 +3,6 @@ import pytest
 from unittest.mock import patch
 from modin.config import TestRayClient
 
-server_proc = None
 
 def _import_pandas(*args):
     import pandas
@@ -22,14 +21,12 @@ def pytest_sessionstart(session):
         ClientObjectRef.__eq__ = patched_eq
 
         port = '50051'
-        global server_proc
-        server_proc = subprocess.Popen([
-            "ray", "start", "--head", "--num-cpus", "2",
-        "--ray-client-server-port", port])
+        subprocess.Popen(["ray", "start", "--head", "--num-cpus", "2",
+            "--ray-client-server-port", port])
         ray.util.connect(f"0.0.0.0:{port}")
         ray.worker.global_worker.run_function_on_all_workers(_import_pandas)
 
 def pytest_sessionfinish(session):
-    if server_proc and TestRayClient.get():
+    if TestRayClient.get():
         stop_proc = subprocess.Popen(["ray", "stop", "--force"])
         stop_proc.wait()
