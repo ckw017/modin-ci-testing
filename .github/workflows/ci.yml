@@ -10,6 +10,7 @@ jobs:
         shell: bash -l {0}
     strategy:
       matrix:
+        python-version: ["3.7"]
         retries: [1]
     env:
       MODIN_ENGINE: ray
