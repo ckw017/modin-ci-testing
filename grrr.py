@@ -577,7 +577,7 @@ def load(*args, **kwargs):
     with magical_lock:
         pickle.load(*args, **kwargs)
 
-def load(*args, **kwargs):
+def loads(*args, **kwargs):
     with magical_lock:
         pickle.loads(*args, **kwargs)
 
