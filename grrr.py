@@ -570,12 +570,16 @@ def _rebuild_tornado_coroutine(func):
     from tornado import gen
     return gen.coroutine(func)
 
+magical_lock = threading.RLock()
 
 # including pickles unloading functions in this namespace
-load = pickle.load
-loads = pickle.loads
+def load(*args, **kwargs):
+    with magical_lock:
+        pickle.load(*args, **kwargs)
 
-magical_lock = threading.RLock()
+def load(*args, **kwargs):
+    with magical_lock:
+        pickle.loads(*args, **kwargs)
 
 def subimport(name):
     # We cannot do simply: `return __import__(name)`: Indeed, if ``name`` is
