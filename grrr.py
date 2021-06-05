@@ -575,11 +575,11 @@ magical_lock = threading.RLock()
 # including pickles unloading functions in this namespace
 def load(*args, **kwargs):
     with magical_lock:
-        pickle.load(*args, **kwargs)
+        return pickle.load(*args, **kwargs)
 
 def loads(*args, **kwargs):
     with magical_lock:
-        pickle.loads(*args, **kwargs)
+        return pickle.loads(*args, **kwargs)
 
 def subimport(name):
     # We cannot do simply: `return __import__(name)`: Indeed, if ``name`` is
