@@ -16,7 +16,7 @@ jobs:
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
-      TEST_RAY_CLIENT: "True"
+      MODIN_TEST_RAY_CLIENT: "True"
     name: "test-ray-client (with_lock ${{matrix.with_lock}}, run #${{matrix.retries}})"
     steps:
       - uses: actions/checkout@v2
