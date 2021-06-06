@@ -270,7 +270,8 @@ class Worker:
                 serialized_value, object_ref=object_ref))
 
     def deserialize_objects(self, data_metadata_pairs, object_refs):
-        with self.lock:
+        # race condition probably idk
+        with self.function_actor_manager.lock:
             context = self.get_serialization_context()
             return context.deserialize_objects(data_metadata_pairs, object_refs)
 
