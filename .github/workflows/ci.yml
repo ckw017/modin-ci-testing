@@ -31,7 +31,8 @@ jobs:
       - run: pip install -r requirements-dev.txt
       - run: pip install -U https://s3-us-west-2.amazonaws.com/ray-wheels/latest/ray-2.0.0.dev0-cp37-cp37m-manylinux2014_x86_64.whl
       - run: pip show ray
-      - run: mv grr.py /usr/share/miniconda/envs/modin/lib/python3.7/site-packages/ray/worker.py
+      - run: mv patched_worker.py /usr/share/miniconda/envs/modin/lib/python3.7/site-packages/ray/worker.py
+        if: matrix.with_lock
       - name: Install HDF5
         run: sudo apt update && sudo apt install -y libhdf5-dev
       - run: MODIN_BENCHMARK_MODE=True pytest modin/pandas/test/internals/test_benchmark_mode.py
