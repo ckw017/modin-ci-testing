@@ -16,7 +16,7 @@ jobs:
     env:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
-      # MODIN_TEST_RAY_CLIENT: "True"
+      MODIN_TEST_RAY_CLIENT: "True"
     name: "test-ray-client (with_lock ${{matrix.with_lock}}, run #${{matrix.retries}})"
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
       - run: pytest modin/pandas/test/dataframe/test_map_metadata.py || echo Flaked
       - run: pytest modin/pandas/test/dataframe/test_reduction.py || echo Flaked
       - run: pytest modin/pandas/test/dataframe/test_udf.py || echo Flaked
-      - run: python -m pytest modin/pandas/test/test_groupby.py || echo Flaked
+      - run: python -m pytest modin/pandas/test/test_groupby.py
       - run: pytest modin/pandas/test/dataframe/test_window.py
       - run: pytest modin/pandas/test/dataframe/test_pickle.py
       - run: python -m pytest modin/pandas/test/test_rolling.py
