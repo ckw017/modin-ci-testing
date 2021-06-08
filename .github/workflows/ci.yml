@@ -16,7 +16,7 @@ jobs:
       MODIN_ENGINE: ray
       MODIN_MEMORY: 1000000000
       MODIN_TEST_RAY_CLIENT: "True"
-    name: "test-ray-client (python ${{matrix.python-version}})"
+    name: "test-ray-client (python ${{matrix.python-version}}, ${{matrix.tests}})"
     steps:
       - uses: actions/checkout@v2
         with:
